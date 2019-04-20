@@ -59,3 +59,7 @@ typings/
 
 # next.js build output
 .next
+
+zlink/
+zlink.spa
+zlink_new.spa
