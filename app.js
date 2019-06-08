@@ -44,10 +44,10 @@ app.get(cfg.http.endpoint, (req, res) => {
     client.json({uuid: requuid, id: params.albumid}); // Send data to user
 });
 
-const server = cfg.secure.useHttps ? https.createServer({
-    cert: fs.readFileSync(cfg.secure.cert, "utf8"),
-    key: fs.readFileSync(cfg.secure.key, "utf8"),
-    ca: fs.readFileSync(cfg.secure.chain, "utf8")
+const server = cfg.useSecure ? https.createServer({
+    cert: cfg.secure.cert !== "" ? fs.readFileSync(cfg.secure.cert, "utf8") : undefined,
+    key: cfg.secure.key !== "" ? fs.readFileSync(cfg.secure.key, "utf8") : undefined,
+    ca: cfg.secure.chain !== "" ? fs.readFileSync(cfg.secure.chain, "utf8") : undefined
 }, app) : http.createServer(app);
 
 const wss = new WebSocket.Server({
