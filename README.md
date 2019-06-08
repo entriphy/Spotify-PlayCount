@@ -21,7 +21,7 @@ Overall, this hasn't been tested thoroughly and it is very possible that you may
     2. Run in the root of the project directory: `node spotify_zlink.js`
     3. If the command was successful, copy the file back to the directory where you copied `zlink.spa` from (it is recommended to make a backup of the old `zlink.spa` file in case something goes wrong)
 4. _**Important**_ You must launch Spotify with the following arguments:
-  `spotify --ignore-certificate-errors --alow-running-insecure-content`
+  `spotify --ignore-certificate-errors --allow-running-insecure-content`
 5. Run the server: `node index.js`
 6. In the Spotify client, open any album/single page. If everything went well, Spotify should connect to the server and accept requests.
     * If the album page shows an exclamation mark, check your launch arguments for Spotify and your config
