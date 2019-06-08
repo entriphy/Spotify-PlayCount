@@ -38,3 +38,12 @@ The server can be configured in the `config.json` file.
 | chain     | Location of https chain file                                                                                                                                                 | String    |
 | endpoint  | Endpoint at which the user can send HTTP GET requests to the API                                                                                                             | String    |
 | ipAddress | IP Address (preferably a LAN address) at which the Spotify client connects to. This is mainly useful if the web server and the Spotify client are on two different machines. | String    |
+
+# Usage
+Simply make a GET request to the endpoint with the query string "albumid" set to the ID of a Spotify album (ex. if the URL is `https://open.spotify.com/album/30X5rD2J07BzYmd3CKzZTa` or `spotify:album:30X5rD2J07BzYmd3CKzZTa`, the string is `30X5rD2J07BzYmd3CKzZTa`)
+
+Curl example: (endpoint is /api/albumPlayCount)
+```bash
+$ curl https://example.com/api/albumPlayCount?albumid=30X5rD2J07BzYmd3CKzZTa
+{"success":true,"data":[{"name":"All My Friends","playcount":1608305,"disc":1,"number":1,"uri":"spotify:track:7sGTH1fber0bhncNMfNxmt"}]}
+```
