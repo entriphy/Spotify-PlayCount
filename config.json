@@ -1,0 +1,15 @@
+{
+    "port": 8080,
+    "useSecure": false,
+    "secure": {
+        "cert": "",
+        "key": "",
+        "chain": "'"
+    },
+    "http": {
+        "endpoint": "/"
+    },
+    "websocket": {
+        "ipAddress": "127.0.0.1"
+    }
+}

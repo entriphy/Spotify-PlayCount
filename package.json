@@ -1,0 +1,28 @@
+{
+  "name": "spotify-playcount",
+  "version": "1.0.0",
+  "description": "Web server API to retrieve play count of all tracks in a Spotify album.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "zlink": "node spotify_zlink.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evilarceus/Spotify-PlayCount.git"
+  },
+  "author": "evilarceus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/evilarceus/Spotify-PlayCount/issues"
+  },
+  "homepage": "https://github.com/evilarceus/Spotify-PlayCount#readme",
+  "dependencies": {
+    "adm-zip": "^0.4.13",
+    "express": "^4.16.4",
+    "fs-extra": "^8.0.1",
+    "uuid": "^3.3.2",
+    "ws": "^6.2.1",
+    "zip-a-folder": "0.0.8"
+  }
+}
