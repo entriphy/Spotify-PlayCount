@@ -47,3 +47,6 @@ Curl example: (endpoint is /api/albumPlayCount)
 $ curl https://example.com/api/albumPlayCount?albumid=30X5rD2J07BzYmd3CKzZTa
 {"success":true,"data":[{"name":"All My Friends","playcount":1608305,"disc":1,"number":1,"uri":"spotify:track:7sGTH1fber0bhncNMfNxmt"}]}
 ```
+
+# Public API
+I am currently hosting this API to the public: https://t4ils.dev:4433/api/beta/albumPlayCount
