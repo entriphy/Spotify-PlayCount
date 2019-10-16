@@ -3,7 +3,7 @@ const fs = require("fs-extra");
 const path = require("path");
 const readline = require("readline");
 const cfg = require("./config.json");
-const query = 'const i=`hm://album/v1/album-app/album/spotify:album:${e}/desktop?${[`catalogue=${encodeURIComponent(t.catalogue)}`,`locale=${encodeURIComponent(t.locale)}`,`username=${encodeURIComponent(t.username)}`].join("&")}`;' // What to look for in each line to inject code
+const query = '=`hm://album/v1/album-app/album/spotify:album:${e}/desktop?${[`catalogue=${encodeURIComponent(t.catalogue)}`,`locale=${encodeURIComponent(t.locale)}`,`username=${encodeURIComponent(t.username)}`].join("&")}`;' // What to look for in each line to inject code
 const splice = `if(!gSocket){console.log("Connecting to server...");gSocket=new WebSocket("${cfg.useSecure ? "wss" : "ws"}://${cfg.websocket.ipAddress}:${cfg.port}");gSocket.onopen=(event)=>{gSocket.onmessage=(msg)=>{msg=JSON.parse(msg.data);console.log(msg);if(msg.id.length!==22)return;const url=\`hm://album/v1/album-app/album/spotify:album:\${msg.id}/desktop?\${[\`catalogue=\${encodeURIComponent(t.catalogue)}\`, \`locale=\${encodeURIComponent(t.locale)}\`, \`username=\${encodeURIComponent(t.username)}\`].join("&")}\`;a.default.resolver.get(url,(e,t)=>{if(e){return gSocket.send(JSON.stringify({uuid:msg.uuid,success:!1,data:e}))}else{return gSocket.send(JSON.stringify({uuid:msg.uuid,success:!0,data:t.getJSONBody()}))}})}}}` // Inject line with this string
 const zipAFolder = require("zip-a-folder"); // This is the only zip package that works with Spotify for some reason; AdmZip doesn't work :(
 const process = require("process");
@@ -37,6 +37,7 @@ console.log("[2/7] Reading zlink/zlink.bundle.js...");
 const lineReader = readline.createInterface(fs.createReadStream("zlink/zlink.bundle.js"));
 let lines = []; // Gets written to new file at the end
 let firstLine = true; // Tracks whether or not the first line is being read; immediately gets set to false after first line is read. (It sounds dumb, but it works, ok?)
+let injectionSuccessful = false; // Tracks if the code injection was successful
 lineReader.on("line", (line) => {
     line = line.replace(/^\s+|\s+$/g, ''); // Remove line endings from string
     if (firstLine) {
@@ -44,16 +45,18 @@ lineReader.on("line", (line) => {
         lines.push("let gSocket;"); // Add global WebSocket variable
         lines.push(line); // Add line to array
     } else if (line.includes(query)) {
-        console.log("[3/7] Injecting code into script...");
+        console.log("[3/7] Attempting to inject code into script...");
         const idx = line.indexOf(query) + query.length; // Calculation of where to insert the splice variable at
         line = line.insertAt(idx, splice); // Insert splice at position
         lines.push(line);
+        injectionSuccessful = true;
     } else {
         lines.push(line);
     }
 });
 
 lineReader.on("close", () => {
+    if (!injectionSuccessful) console.error("@@@ It appears that the code injection was unsuccessful :( (If possible, submit an issue on GitHub with your zlink_old_***** file that was generated)")
     console.log("[4/7] Writing new script to file...");
     fs.writeFileSync("zlink/zlink.bundle.js", lines.join("\n")); // Write to file
     console.log("[5/7] Adding contents of zlink/ to zip...");
