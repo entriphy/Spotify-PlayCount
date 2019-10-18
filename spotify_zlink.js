@@ -4,7 +4,7 @@ const path = require("path");
 const readline = require("readline");
 const cfg = require("./config.json");
 const query = '=`hm://album/v1/album-app/album/spotify:album:${e}/desktop?${[`catalogue=${encodeURIComponent(t.catalogue)}`,`locale=${encodeURIComponent(t.locale)}`,`username=${encodeURIComponent(t.username)}`].join("&")}`;' // What to look for in each line to inject code
-const splice = `if(!gSocket){console.log("Connecting to server...");gSocket=new WebSocket("${cfg.useSecure ? "wss" : "ws"}://${cfg.websocket.ipAddress}:${cfg.port}");gSocket.onopen=(event)=>{gSocket.onmessage=(msg)=>{msg=JSON.parse(msg.data);console.log(msg);if(msg.id.length!==22)return;const url=\`hm://album/v1/album-app/album/spotify:album:\${msg.id}/desktop?\${[\`catalogue=\${encodeURIComponent(t.catalogue)}\`, \`locale=\${encodeURIComponent(t.locale)}\`, \`username=\${encodeURIComponent(t.username)}\`].join("&")}\`;a.default.resolver.get(url,(e,t)=>{if(e){return gSocket.send(JSON.stringify({uuid:msg.uuid,success:!1,data:e}))}else{return gSocket.send(JSON.stringify({uuid:msg.uuid,success:!0,data:t.getJSONBody()}))}})}}}` // Inject line with this string
+const splice = `if(!wSocket){console.log("Connecting to server...");wSocket=new WebSocket("${cfg.useSecure ? "wss" : "ws"}://${cfg.websocket.ipAddress}:${cfg.port}");wSocket.onopen=(event)=>{wSocket.onmessage=(msg)=>{msg=JSON.parse(msg.data);console.log(msg);if(msg.id.length!==22)return;const url=\`hm://album/v1/album-app/album/spotify:album:\${msg.id}/desktop?\${[\`catalogue=\${encodeURIComponent(t.catalogue)}\`, \`locale=\${encodeURIComponent(t.locale)}\`, \`username=\${encodeURIComponent(t.username)}\`].join("&")}\`;i.default.resolver.get(url,(e,t)=>{if(e){return wSocket.send(JSON.stringify({uuid:msg.uuid,success:!1,data:e}))}else{return wSocket.send(JSON.stringify({uuid:msg.uuid,success:!0,data:t.getJSONBody()}))}})}}}` // Inject line with this string
 const zipAFolder = require("zip-a-folder"); // This is the only zip package that works with Spotify for some reason; AdmZip doesn't work :(
 const process = require("process");
 
@@ -42,7 +42,7 @@ lineReader.on("line", (line) => {
     line = line.replace(/^\s+|\s+$/g, ''); // Remove line endings from string
     if (firstLine) {
         firstLine = false;
-        lines.push("let gSocket;"); // Add global WebSocket variable
+        lines.push("let wSocket;"); // Add global WebSocket variable
         lines.push(line); // Add line to array
     } else if (line.includes(query)) {
         console.log("[3/7] Attempting to inject code into script...");
