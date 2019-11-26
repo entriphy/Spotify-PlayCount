@@ -1,0 +1,27 @@
+{
+    "name": "Spotify Playcount",
+    "version": "1.0",
+    "description": "Retrieves playcount for artist and album pages.",
+    "manifest_version": 2,
+    "icons": {
+        "128": "128.png"
+    },
+    "content_scripts": [
+        {
+            "matches": ["https://open.spotify.com/*"],
+            "js": ["content.js"],
+            "run_at": "document_idle",
+            "all_frames": true
+        }
+    ],
+    "background": {
+        "scripts": [
+            "background.js"
+        ],
+        "persistent": false
+    },
+    "permissions": [
+        "tabs",
+        "https://open.spotify.com/*"
+    ]
+}
