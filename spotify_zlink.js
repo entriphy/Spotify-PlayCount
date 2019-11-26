@@ -4,7 +4,7 @@ const path = require("path");
 const readline = require("readline");
 const cfg = require("./config.json");
 const query = '=`hm://album/v1/album-app/album/spotify:album:${e}/desktop?${[`catalogue=${encodeURIComponent(t.catalogue)}`,`locale=${encodeURIComponent(t.locale)}`,`username=${encodeURIComponent(t.username)}`].join("&")}`;' // What to look for in each line to inject code
-const splice = `if(!wSocket){console.log("Connecting to server...");wSocket=new WebSocket("${cfg.useSecure ? "wss" : "ws"}://${cfg.websocket.ipAddress}:${cfg.port}");wSocket.onopen=(event)=>{wSocket.onmessage=(msg)=>{msg=JSON.parse(msg.data);console.log(msg);if(msg.id.length!==22)return;const url=\`hm://album/v1/album-app/album/spotify:album:\${msg.id}/desktop?\${[\`catalogue=\${encodeURIComponent(t.catalogue)}\`, \`locale=\${encodeURIComponent(t.locale)}\`, \`username=\${encodeURIComponent(t.username)}\`].join("&")}\`;i.default.resolver.get(url,(e,t)=>{if(e){return wSocket.send(JSON.stringify({uuid:msg.uuid,success:!1,data:e}))}else{return wSocket.send(JSON.stringify({uuid:msg.uuid,success:!0,data:t.getJSONBody()}))}})}}}` // Inject line with this string
+const splice = `if(!wSocket){console.log("Connecting to server...");wSocket=new WebSocket("${cfg.useSecure ? "wss" : "ws"}://${cfg.websocket.ipAddress}:${cfg.port}");wSocket.onopen=(event)=>{wSocket.onmessage=(msg)=>{msg=JSON.parse(msg.data);console.log(msg);switch(msg.req){case "playcount":if(msg.id.length!==22)return;const uri=\`hm://album/v1/album-app/album/spotify:album:\${msg.id}/desktop?\${[\`catalogue=\${encodeURIComponent(t.catalogue)}\`, \`locale=\${encodeURIComponent(t.locale)}\`].join("&")}\`;console.log(uri);a.default.resolver.get(uri,(e,t)=>{console.log(e,t);if(e){return wSocket.send(JSON.stringify({uuid:msg.uuid,success:!1,data:e}))}else{return wSocket.send(JSON.stringify({uuid:msg.uuid,success:!0,data:t.getJSONBody()}))}});break;case "hermes":const _uri=msg.uri;console.log(_uri);a.default.resolver.get(_uri,(e,t)=>{console.log(e,t);if(e){return wSocket.send(JSON.stringify({uuid:msg.uuid,success:!1,data:e}))}else{return wSocket.send(JSON.stringify({uuid:msg.uuid,success:!0,data:t.getJSONBody()}))}});break}}}}` // Inject with this string
 const zipAFolder = require("zip-a-folder"); // This is the only zip package that works with Spotify for some reason; AdmZip doesn't work :(
 const process = require("process");
 
@@ -63,7 +63,7 @@ lineReader.on("close", () => {
     fs.writeFileSync("zlink/.zlinkignore", ""); // Add ignore file so this script doesn't somehow modify the script twice
     console.log("[6/7] Backing up old zlink.spa...")
     fs.renameSync("zlink.spa", "zlink_old_" + Math.floor(new Date().getTime() / 1000) + ".spa"); // Rename original .spa file
-    console.log("[7/7] Zipping new zlink.spa...")
+    console.log("[7/7] Zipping new zlink.spa...");
     zipAFolder.zip("./zlink", "zlink.spa"); // Zip zlink directory
     console.log("Finished!")
 });

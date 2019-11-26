@@ -19,6 +19,7 @@
   "homepage": "https://github.com/evilarceus/Spotify-PlayCount#readme",
   "dependencies": {
     "adm-zip": "^0.4.13",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "fs-extra": "^8.0.1",
     "uuid": "^3.3.2",
