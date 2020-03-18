@@ -50,3 +50,5 @@ $ curl https://example.com/api/albumPlayCount?albumid=30X5rD2J07BzYmd3CKzZTa
 
 # Public API
 I am currently hosting this API to the public: https://t4ils.dev:4433/api/beta/albumPlayCount
+
+If the public API is not working correctly, please report it [here](https://github.com/evilarceus/Spotify-PlayCount/issues/11).
