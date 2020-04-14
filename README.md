@@ -1,3 +1,5 @@
+**ARCHIVED in favor of [sp-playcount-librespot](https://github.com/evilarceus/sp-playcount-librespot). Please use that instead.**
+
 # Spotify Playcount
 Web server API to retrieve play count of all tracks in a Spotify album.
 
